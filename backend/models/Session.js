@@ -2,13 +2,15 @@ import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
 
 const SessionSchema = new Schema({
-  tutorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  studentId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  date: { type: Date, required: true },
-  duration: { type: Number, required: true },
-  course: { type: String, required: true },
-  meetingType: { type: String, required: true },
-  status: { type: String, required: true },
+  // there could be multiple students in a group session
+  students: [{ type: Schema.Types.ObjectId, ref: 'User', default: [] }],
+  tutor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  subject: { type: String, required: true },
+  sessionType: { type: String, enum: ['one-on-one', 'group'], required: true },
+  scheduledAt: { type: Date, required: true }, // Date and time of the session
+  duration: { type: Number, required: true }, // Duration in minutes
+  price: { type: Number, required: true }, // Price of the session
+  createdAt: { type: Date, default: Date.now },
 });
 
-export default models.Session || model("Session", SessionSchema);
+export default models.Session || model('Session', SessionSchema);
