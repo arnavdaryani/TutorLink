@@ -270,7 +270,7 @@ const StudentQuestionPortal = () => {
       email: user?.email,
       avatarUrl: user?.picture,
       isPurdue: true,
-      
+
       ...formData,
     };
 
@@ -435,7 +435,7 @@ const StudentQuestionPortal = () => {
           </div>
           <form onSubmit={handleSubmit}>
             <h1 style={{ textAlign: "center", color: "#fff", marginBottom: "20px" }}>
-              Student Tutoring Request Form
+              Fill out your tutoring preferences
             </h1>
             {renderStep()}
             <div style={buttonContainerStyle}>

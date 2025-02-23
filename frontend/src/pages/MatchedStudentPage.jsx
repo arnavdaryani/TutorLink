@@ -4,40 +4,22 @@ function MatchedStudentPage() {
   // Sample data of matched students (replace with real data as needed)
   const matchedStudents = [
     { 
-      name: "Alice Brown", 
-      matchPercentage: 90,
+      name: "Devansh Khandelwal", 
+      matchPercentage: 97,
       linkedin: "https://www.linkedin.com/in/alicebrown",
-      email: "alicebrown@example.com",
-      subjects: "Biology, Chemistry, Math",
+      subjects: "Computer Science, Programming",
       bio: "Dedicated student passionate about science and learning."
     },
     { 
-      name: "Bob Martin", 
-      matchPercentage: 85,
-      linkedin: "https://www.linkedin.com/in/bobmartin",
-      email: "bobmartin@example.com",
-      subjects: "Economics, Business, Statistics",
-      bio: "Focused on business studies and helping peers excel academically."
-    },
-    { 
-      name: "Carla Reyes", 
-      matchPercentage: 93,
-      linkedin: "https://www.linkedin.com/in/carlareyes",
-      email: "carlareyes@example.com",
-      subjects: "English, History, Literature",
-      bio: "Enthusiastic about literature and sharing her passion for reading."
-    },
-    { 
       name: "David Lee", 
-      matchPercentage: 97,
+      matchPercentage: 85,
       linkedin: "https://www.linkedin.com/in/davidlee",
-      email: "davidlee@example.com",
-      subjects: "Mathematics, Physics, Computer Science",
+      subjects: "Mathematics, Computer Science",
       bio: "Combines technical expertise with a creative approach to problem-solving."
     },
   ];
 
-  // State to track each student's response ("accepted" or "rejected")
+  // State to track each student's response ("Accepted" or "Rejected")
   const [responses, setResponses] = useState({});
 
   // Handler for Accept/Reject buttons
@@ -56,6 +38,20 @@ function MatchedStudentPage() {
       style={styles.icon}
     >
       <path d="M20.447 20.452h-3.554v-5.569c0-1.327-.027-3.036-1.849-3.036-1.85 0-2.134 1.445-2.134 2.941v5.664h-3.554V9h3.414v1.561h.049c.476-.9 1.637-1.849 3.369-1.849 3.601 0 4.267 2.368 4.267 5.455v6.285zM5.337 7.433c-1.144 0-2.072-.928-2.072-2.072 0-1.144.928-2.072 2.072-2.072 1.144 0 2.072.928 2.072 2.072 0 1.144-.928 2.072-2.072 2.072zm1.777 13.019H3.56V9h3.554v11.452zM22.225 0H1.771C.792 0 0 .771 0 1.723v20.554C0 23.229.792 24 1.771 24h20.451C23.208 24 24 23.229 24 22.277V1.723C24 .771 23.208 0 22.225 0z"/>
+    </svg>
+  );
+
+  // Inline SVG for Email icon
+  const EmailIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24" 
+      height="24"
+      viewBox="0 0 24 24"
+      fill="#48BB78"
+      style={styles.icon}
+    >
+      <path d="M12 13.065l-10-7.065v12h20v-12l-10 7.065zm0-2.13l10-7.435v-1.5h-20v1.5l10 7.435z"/>
     </svg>
   );
 
@@ -83,9 +79,16 @@ function MatchedStudentPage() {
                 <div style={styles.cardContent}>
                   <h2 style={styles.name}>{student.name}</h2>
                   <div style={styles.match}>{student.matchPercentage}%</div>
-                  <p style={styles.info}><strong>Subjects:</strong> {student.subjects}</p>
-                  <p style={styles.info}><strong>Bio:</strong> {student.bio}</p>
-                  <p style={styles.info}><strong>Email:</strong> {student.email}</p>
+                  {/* Render subjects as a read-only text field */}
+                  <input
+                    type="text"
+                    readOnly
+                    value={student.subjects}
+                    style={styles.subjectsField}
+                  />
+                  <p style={styles.info}>
+                    <strong>Bio:</strong> {student.bio}
+                  </p>
                   {/* Display status if a response exists */}
                   {responses[index] && (
                     <p style={styles.status}>
@@ -110,14 +113,23 @@ function MatchedStudentPage() {
                     </button>
                   </div>
                 )}
-                <a 
-                  href={student.linkedin} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  style={styles.iconLink}
-                >
-                  <LinkedInIcon />
-                </a>
+                {/* Icons container with Email and LinkedIn icons */}
+                <div style={styles.iconContainer}>
+                  <a 
+                    href={`mailto:${student.email}`} 
+                    style={styles.iconLink}
+                  >
+                    <EmailIcon />
+                  </a>
+                  <a 
+                    href={student.linkedin} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    style={styles.iconLink}
+                  >
+                    <LinkedInIcon />
+                  </a>
+                </div>
               </div>
             );
           })}
@@ -179,6 +191,19 @@ const styles = {
     color: "#4caf50",
     textAlign: "center",
   },
+  subjectsField: {
+    width: "100%",
+    padding: "0.5rem",
+    fontSize: "1rem",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    backgroundColor: "#333",
+    color: "#fff",
+    marginTop: "0.5rem",
+    appearance: "none",
+    WebkitAppearance: "none",
+    outline: "none",
+  },
   info: {
     margin: "0.5rem 0",
     fontSize: "0.9rem",
@@ -213,9 +238,14 @@ const styles = {
     borderRadius: "4px",
     cursor: "pointer",
   },
-  iconLink: {
-    alignSelf: "center",
+  iconContainer: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "1rem",
     marginTop: "1rem",
+  },
+  iconLink: {
+    textDecoration: "none",
   },
   icon: {
     width: "24px",

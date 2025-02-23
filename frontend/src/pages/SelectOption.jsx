@@ -142,7 +142,7 @@ function SelectOption() {
       <div className="main-container">
         {/* Header section */}
         <header>
-          <h1>Welcome to TutorLink</h1>
+          <h1>Welcome to EduMatch</h1>
           {user ? (
             <div>
               <p>

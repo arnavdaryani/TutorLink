@@ -34,7 +34,7 @@ const Navbar = () => {
   return (
     <nav style={styles.navbar}>
       <div style={styles.navLeft}>
-        <span style={styles.logo}>TutorLink</span>
+        <span style={styles.logo}>EduMatch</span>
       </div>
       <div style={styles.navRight}>
         <a href="#story" style={styles.navLink}>Product and Services</a>

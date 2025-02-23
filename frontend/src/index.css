@@ -2,4 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* Add any global CSS rules in this file */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  body {
+    overflow: hidden;
+  }
+  

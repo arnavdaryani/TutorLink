@@ -243,8 +243,6 @@ const TutorQuestionPortal = () => {
   // On final submission, log data and redirect to the matched tutors page
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    alert("Form submitted! Check console for details.");
 
     // Navigate to the matched tutors page
     navigate("/MatchedStudentPage");
