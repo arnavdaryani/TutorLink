@@ -1,9 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navbar"; // Adjust path if necessary
+import { useUser } from "../UserContext"; // Make sure this path is correct
 
 function SelectOption() {
   const navigate = useNavigate();
+  const { user, loading } = useUser();
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", paddingTop: "2rem", color: "#fff" }}>
+        Loading user data...
+      </div>
+    );
+  }
 
   return (
     <>
@@ -19,7 +29,7 @@ function SelectOption() {
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: 'Montserrat', sans-serif; /* Use the imported font */
+            font-family: 'Montserrat', sans-serif;
             background: radial-gradient(circle at top left, #111 0%, #000 100%);
             color: #fff;
           }
@@ -83,7 +93,7 @@ function SelectOption() {
           .card h2 {
             margin-bottom: 1rem;
             font-weight: 600;
-            font-size: 1.6rem; /* Larger heading text */
+            font-size: 1.6rem;
           }
           .card p {
             margin-bottom: 1.5rem;
@@ -104,11 +114,11 @@ function SelectOption() {
             opacity: 0.9;
           }
           .student-btn {
-            background-color: #7842E5; /* Green */
+            background-color: #7842E5;
             color: #ffffff;
           }
           .tutor-btn {
-            background-color: #2196F3; /* Blue */
+            background-color: #2196F3;
             color: #ffffff;
           }
 
@@ -125,15 +135,30 @@ function SelectOption() {
         `}
       </style>
 
-      {/* 9) Top navigation */}
+      {/* Top navigation */}
       <Navbar />
 
-      {/* 10) Main container */}
+      {/* Main container */}
       <div className="main-container">
         {/* Header section */}
         <header>
           <h1>Welcome to TutorLink</h1>
-          <p>Your one-stop platform for students and tutors to connect.</p>
+          {user ? (
+            <div>
+              <p>
+                Logged in as <strong>{user.name}</strong> ({user.email})
+              </p>
+              {user.picture && (
+                <img
+                  src={user.picture}
+                  alt="Profile"
+                  style={{ width: "100px", borderRadius: "50%" }}
+                />
+              )}
+            </div>
+          ) : (
+            <p>Your one-stop platform for students and tutors to connect.</p>
+          )}
         </header>
 
         {/* Cards section */}
@@ -146,7 +171,7 @@ function SelectOption() {
               className="student-btn"
               onClick={() => navigate("/StudentQuestionPortal")}
             >
-              Get Started
+              Start Learning
             </button>
           </div>
 
@@ -158,7 +183,7 @@ function SelectOption() {
               className="tutor-btn"
               onClick={() => navigate("/TutorQuestionPortal")}
             >
-              Become a Tutor
+              Start Teaching
             </button>
           </div>
         </div>

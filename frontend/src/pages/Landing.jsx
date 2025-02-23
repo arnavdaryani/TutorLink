@@ -1,16 +1,52 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // v6 or higher
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EduMatchLogo from "../images/EduMatch.png"; // Adjust path if needed
 
 function LandingPage() {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  // Check if user is authenticated by calling the backend's /profile endpoint.
+  useEffect(() => {
+    fetch("http://localhost:3000/profile", {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Error checking authentication:", err);
+        setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setLoadingAuth(false);
+      });
+  }, []);
+
+  const handleLogin = () => {
+    if (isAuthenticated) {
+      // User is already authenticated, simply navigate to /SelectOption on the frontend.
+      navigate("/SelectOption");
+    } else {
+      // Not authenticated, redirect to the backend login endpoint.
+      // Ensure that your backend's /login route is enabled and that your Auth0 settings
+      // have Allowed Callback URL set to http://localhost:3000/callback (or your custom callback).
+      window.location.href =
+        "http://localhost:3000/login?returnTo=http://localhost:5173/SelectOption";
+    }
+  };
 
   // Testimonials array
   const testimonials = [
     {
       quote:
         "TutorLink matched me with a tutor who truly understands my learning style. My grades have improved drastically!",
-      author: "Jane, High School Student",
+      author: "John Doe, High School Student",
     },
     {
       quote:
@@ -25,27 +61,31 @@ function LandingPage() {
   ];
 
   // State to track the current testimonial index
-  const [currentTestimonial, setCurrentTestimonial] = React.useState(0);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   // Change testimonial every 5 seconds
-  React.useEffect(() => {
+  useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 5000); // change testimonial every 5000ms (5 seconds)
+    }, 5000);
     return () => clearInterval(intervalId);
   }, [testimonials.length]);
+
+  // While checking authentication, you might show a loader (optional)
+  if (loadingAuth) {
+    return <div style={{ textAlign: "center", paddingTop: "2rem", color: "#fff" }}>Checking authentication...</div>;
+  }
 
   return (
     <>
       {/* Global and keyframe styles */}
       <style>
         {`
-          /* Remove default margin, padding on html/body */
           html, body {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #000; /* Ensure full black background */
+            background-color: #000;
             color: #fff;
             overflow: auto;
             box-sizing: border-box;
@@ -68,28 +108,35 @@ function LandingPage() {
             <span style={styles.logo}>EduMatch</span>
           </div>
           <div style={styles.navRight}>
-            <a href="#story" style={styles.navLink}>Product and Services</a>
-            <a href="#news" style={styles.navLink}>Testimonials</a>
-            <a href="#login" style={styles.navLink}>Contact</a>
-            <a href="#signup" style={styles.navLink}>Login</a>
+            <a href="#story" style={styles.navLink}>
+              Product and Services
+            </a>
+            <a href="#news" style={styles.navLink}>
+              Testimonials
+            </a>
+            <a href="#login" style={styles.navLink}>
+              Contact
+            </a>
+            <a href="#signup" style={styles.navLink}>
+              Login
+            </a>
           </div>
         </nav>
 
         {/* Hero Section */}
         <section style={styles.heroSection}>
           <img src={EduMatchLogo} alt="EduMatch" style={styles.logoImage} />
-          {/* Moved the button above the text and center aligned it */}
-          <button style={styles.heroButton} onClick={() => navigate("/SelectOption")}>
+          <button style={styles.heroButton} onClick={handleLogin}>
             Get started
           </button>
           <div style={styles.dynamicTextBox}>
             <p style={styles.heroSubtitle}>
-              A smart, ML-powered tutor-student connector with killer UI and instant market appeal.
+              A smart, ML-powered tutor-student connector!
             </p>
           </div>
         </section>
 
-        {/* Testimonial Section: Display one testimonial at a time */}
+        {/* Testimonial Section */}
         <section style={styles.testimonialSection}>
           <div style={styles.testimonialItem}>
             <p style={styles.testimonialText}>
@@ -165,8 +212,8 @@ const styles = {
     borderRadius: "10px",
     fontSize: "1rem",
     cursor: "pointer",
-    display: "block",     // Makes the button a block element
-    margin: "0 auto 1rem", // Centers the button and adds spacing below it
+    display: "block",
+    margin: "0 auto 1rem",
   },
   logoImage: {
     width: "900px",

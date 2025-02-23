@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function MatchedTutorsPage() {
+  // State to control the 5-second loading delay
+  const [loading, setLoading] = useState(true);
+
   // Sample data of matched tutors (replace with real data as needed)
   const matchedTutors = [
     { 
       name: "John Doe", 
       experience: "3 years teaching CS courses", 
-      matchPercentage: 95,
+      matchPercentage: 85,
+      
       linkedin: "https://www.linkedin.com/in/johndoe",
       email: "johndoe@example.com",
-      bio: "Passionate about coding and mentoring future developers."
     },
     { 
       name: "Jane Smith", 
@@ -17,7 +20,6 @@ function MatchedTutorsPage() {
       matchPercentage: 88,
       linkedin: "https://www.linkedin.com/in/janesmith",
       email: "janesmith@example.com",
-      bio: "Dedicated to helping students excel in mathematics."
     },
     { 
       name: "Sam Johnson", 
@@ -25,7 +27,6 @@ function MatchedTutorsPage() {
       matchPercentage: 92,
       linkedin: "https://www.linkedin.com/in/samjohnson",
       email: "samjohnson@example.com",
-      bio: "Enthusiastic about sharing complex physics concepts in a clear manner."
     },
     { 
       name: "Lisa Chen", 
@@ -33,7 +34,6 @@ function MatchedTutorsPage() {
       matchPercentage: 99,
       linkedin: "https://www.linkedin.com/in/lisachen",
       email: "lisachen@example.com",
-      bio: "Expert in scientific subjects with a warm, engaging teaching style."
     },
   ];
 
@@ -89,6 +89,22 @@ function MatchedTutorsPage() {
     </svg>
   );
 
+  // Simulate a 5-second loading delay before showing main content.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={styles.loadingContainer}>
+        <h1 style={{ color: "#fff" }}>Loading your matched tutors...</h1>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Global styles to disable scrolling */}
@@ -116,25 +132,23 @@ function MatchedTutorsPage() {
                   <h2 style={styles.name}>{tutor.name}</h2>
                   <p style={styles.experience}>{tutor.experience}</p>
                   <div style={styles.match}>{tutor.matchPercentage}%</div>
-                  <p style={styles.info}><strong>Bio:</strong> {tutor.bio}</p>
-                  <p style={styles.info}><strong>Email:</strong> {tutor.email}</p>
+                  <p style={styles.info}>
+                    <p style={styles.subjects}>Subjects: {tutor.subjects}</p>
+                  </p>
                 </div>
 
                 {/* Star rating container */}
                 <StarRating rating={rating} />
 
                 {/* Icons container */}
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '1rem' }}>
-                  <a
-                    href={`mailto:${tutor.email}`} 
-                    style={styles.iconLink}
-                  >
+                <div style={styles.iconContainer}>
+                  <a href={`mailto:${tutor.email}`} style={styles.iconLink}>
                     <EmailIcon />
                   </a>
-                  <a 
-                    href={tutor.linkedin} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <a
+                    href={tutor.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={styles.iconLink}
                   >
                     <LinkedInIcon />
@@ -143,7 +157,7 @@ function MatchedTutorsPage() {
 
                 {/* Button container with toggle button */}
                 <div style={styles.buttonContainer}>
-                  <button 
+                  <button
                     style={
                       requestsSent[index]
                         ? { ...styles.button, backgroundColor: "red" }
@@ -158,7 +172,9 @@ function MatchedTutorsPage() {
                 {/* Status display */}
                 <div style={styles.statusContainer}>
                   <p style={styles.statusText}>
-                    {requestsSent[index] ? "Status: Pending" : "Status: Not Requested"}
+                    {requestsSent[index]
+                      ? "Status: Pending"
+                      : "Status: Not Requested"}
                   </p>
                 </div>
               </div>
@@ -170,7 +186,16 @@ function MatchedTutorsPage() {
   );
 }
 
+// ----- STYLES -----
 const styles = {
+  loadingContainer: {
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "#000",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   pageWrapper: {
     width: "100vw",
     height: "100vh",
@@ -225,15 +250,21 @@ const styles = {
     fontWeight: "bold",
     fontSize: "1.5rem",
     color: "#4caf50",
-    textAlign: "center"
+    textAlign: "center",
   },
   info: {
     margin: "0.5rem 0",
     fontSize: "0.9rem",
     color: "#ccc",
   },
+  iconContainer: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "2rem",
+    marginTop: "1rem",
+  },
   iconLink: {
-    // Additional styling for icon links can go here
+    textDecoration: "none",
   },
   icon: {
     width: "20px",
