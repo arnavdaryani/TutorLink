@@ -18,3 +18,12 @@ export const createSession = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getUserSessions = async (req, res) => {
+  try {
+    const sessions = await Session.find({ tutor: req.params.userId });
+    res.status(200).json(sessions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -10,6 +10,7 @@ const ClassTeachingSchema = new Schema({
   classesTeaching: { type: [String], required: true },
   hourlyRate: { type: Number, required: true },
   reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }],
+  tutorSessionPreferrenceType: { type: String, required: true },
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user who created this
 });
 
